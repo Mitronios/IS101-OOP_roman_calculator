@@ -8,13 +8,13 @@ class CalcButton(tk.Frame):
     def __init__(self, parent, text: str, command: callable): #"Cuelga del padre", root.
         super().__init__(parent, width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
         self.pack_propagate(False)#Que mantenga sus dimensiones aunequ el tamaño del contenedor cambie.
-        btn = tk.Button(self, text=text, command=self.intermediate_fn)
+        btn = tk.Button(self, text=text, command=self.__handle_click)
         btn.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
 
         self.text = text
         self.command = command
 
-    def intermediate_fn(self):
+    def __handle_click(self): #Utilizando __ antes del nombre de la función le decimos que esta es privada.
         self.command(self.text)
 
 #Keyboard
@@ -41,7 +41,7 @@ class keyBoard(tk.Frame):
 class Display(tk.Frame):
     #Esta es la caja "contenedora"
     def __init__(self, parent, text: str=""):
-        super().__init__(parent, width=BUTTON_WIDTH*3, height=BUTTON_HEIGHT) # es lo mismo que escribir tk.Frame.__init__(parent,etc)
+        super().__init__(parent, width=BUTTON_WIDTH*3, height=BUTTON_HEIGHT) # es lo mismo que escribir tk.Frame.__init__(self, parent,etc)
         self.pack_propagate(False)
     #Esto es lo que meto dentro de la caja para que sea lo que se ve
         self.lbl_display = tk.Label(self, text=text, fg="white", bg="black", font=("Arial", 36), anchor=tk.E)
@@ -50,7 +50,7 @@ class Display(tk.Frame):
     def show(self, text: str):
         self.lbl_display.config(text=text)
 
-#Calculator
+#Calculator: "Interfaz"
 class Calculator(tk.Frame):
     def __init__(self, parent, command: callable):
         super().__init__(parent)

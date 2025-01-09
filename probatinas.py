@@ -1,7 +1,7 @@
 import tkinter as tk
 from calc.views import CalcButton, Calculator, Display, keyBoard
 
-def fn_delegada(btn_clickado):
+def fn_delegada(btn_clickado: str):
   calc.show(btn_clickado)
 
 #Root
