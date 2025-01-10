@@ -1,5 +1,5 @@
 """
-Create the necessary objets to solve the tests, check init and roman numbers to take the proper functions created.
+Create the necessary objets to solve the tests that will be used when controller is created.
 """
 import enum
 
@@ -27,7 +27,7 @@ class Calculate:
     @property
     def result(self) ->object:
         result = None
-        if self.num_1 and self.num_2 != None:
+        if self.state == Status.COMPLETED:
             if self.operation == Operations.ADD:
                 result = self.num_1 + self.num_2
             elif self.operation == Operations.SUB:
@@ -39,7 +39,7 @@ class Calculate:
             elif self.operation == Operations.MOD:
                 result = self.num_1 % self.num_2
             self.__is_solved = True
-            
+
         return result
         
     @property

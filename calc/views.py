@@ -1,7 +1,14 @@
 import tkinter as tk
+from enum import Enum
 
 BUTTON_WIDTH = 90
 BUTTON_HEIGHT = 50
+
+class ButtonTypes(Enum):
+    RESET = 1
+    EQUAL = 2
+    DIGITS = 3
+    OPERATIONS = 4
 
 #Buttons
 class CalcButton(tk.Frame):
@@ -19,21 +26,29 @@ class CalcButton(tk.Frame):
 
 #Keyboard
 class keyBoard(tk.Frame):
+    text_buttons = ("Clear", "%", "/",
+                         "I", "V", "*", 
+                         "X", "L", "-", 
+                         "C", "D", "+", 
+                         "M", ".", "=")
+    
+    button_type = {
+        ButtonTypes.RESET: ["clear"],
+        ButtonTypes.EQUAL: ["="],
+        ButtonTypes.DIGITS: ["I", "V", "X", "L", "C", "D", "M", "."],
+        ButtonTypes.OPERATIONS: ["+", "-", "*", "/", "%"]
+    }
+    
     def __init__(self, parent, command: callable):
         super().__init__(parent, width=3 * BUTTON_WIDTH, height=5 * BUTTON_HEIGHT)
         self.grid_propagate(False)
 
         self.buttons = []
-        text_buttons = ("Clear", "%", "/",
-                         "I", "V", "*", 
-                         "X", "L", "-", 
-                         "C", "D", "+", 
-                         "M", ".", "=")
 
         ix = 0
         for row in range(5):
             for column in range (3):
-                btn = CalcButton(self, text_buttons[ix], command=command)
+                btn = CalcButton(self, self.text_buttons[ix], command=command)
                 btn.grid(column=column, row=row)
                 ix +=1
 
@@ -56,8 +71,8 @@ class Calculator(tk.Frame):
         super().__init__(parent)
         self.display = Display(self)
         self.display.pack()
-        keyboard = keyBoard(self, command)
-        keyboard.pack()
+        self.keyboard = keyBoard(self, command)
+        self.keyboard.pack()
 
     def show(self, text: str):
         self.display.show(text)
