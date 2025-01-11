@@ -1,43 +1,35 @@
 import tkinter as tk
-from enum import Enum
+from calc.models.keys import ButtonType, Key
 
 BUTTON_WIDTH = 90
 BUTTON_HEIGHT = 50
 
-class ButtonTypes(Enum):
-    RESET = 1
-    EQUAL = 2
-    DIGITS = 3
-    OPERATIONS = 4
-
 #Buttons
 class CalcButton(tk.Frame):
-    def __init__(self, parent, text: str, command: callable): #"Cuelga del padre", root.
+    def __init__(self, parent, key: Key, command: callable): #"Cuelga del padre", root.
         super().__init__(parent, width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
         self.pack_propagate(False)#Que mantenga sus dimensiones aunequ el tamaño del contenedor cambie.
-        btn = tk.Button(self, text=text, command=self.__handle_click)
+        btn = tk.Button(self, text=key.value, command=self.__handle_click)
         btn.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
 
-        self.text = text
+        self.key = key
         self.command = command
 
     def __handle_click(self): #Utilizando __ antes del nombre de la función le decimos que esta es privada.
-        self.command(self.text)
+        self.command(self.key)
 
 #Keyboard
 class keyBoard(tk.Frame):
-    text_buttons = ("Clear", "%", "/",
-                         "I", "V", "*", 
-                         "X", "L", "-", 
-                         "C", "D", "+", 
-                         "M", ".", "=")
+    key_buttons = (Key("Clear", ButtonType.RESET), Key("%", ButtonType.OPERATIONS), 
+                   Key("/", ButtonType.OPERATIONS), Key("-", ButtonType.OPERATIONS),
+                   Key("*", ButtonType.OPERATIONS), Key("+", ButtonType.OPERATIONS),
+                   Key("=", ButtonType.EQUAL), Key("I", ButtonType.DIGITS), 
+                   Key("V", ButtonType.DIGITS),Key("X", ButtonType.DIGITS),
+                   Key("L", ButtonType.DIGITS), Key("C", ButtonType.DIGITS),
+                   Key("D", ButtonType.DIGITS), Key("M", ButtonType.DIGITS),
+                   Key(".", ButtonType.DIGITS)  
+                    )
     
-    button_type = {
-        ButtonTypes.RESET: ["clear"],
-        ButtonTypes.EQUAL: ["="],
-        ButtonTypes.DIGITS: ["I", "V", "X", "L", "C", "D", "M", "."],
-        ButtonTypes.OPERATIONS: ["+", "-", "*", "/", "%"]
-    }
     
     def __init__(self, parent, command: callable):
         super().__init__(parent, width=3 * BUTTON_WIDTH, height=5 * BUTTON_HEIGHT)
@@ -48,7 +40,7 @@ class keyBoard(tk.Frame):
         ix = 0
         for row in range(5):
             for column in range (3):
-                btn = CalcButton(self, self.text_buttons[ix], command=command)
+                btn = CalcButton(self, self.key_buttons[ix], command=command)
                 btn.grid(column=column, row=row)
                 ix +=1
 
@@ -71,8 +63,8 @@ class Calculator(tk.Frame):
         super().__init__(parent)
         self.display = Display(self)
         self.display.pack()
-        self.keyboard = keyBoard(self, command)
-        self.keyboard.pack()
+        keyboard = keyBoard(self, command)
+        keyboard.pack()
 
     def show(self, text: str):
         self.display.show(text)

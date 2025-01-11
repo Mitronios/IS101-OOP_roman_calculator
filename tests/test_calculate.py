@@ -1,4 +1,5 @@
 from calc.models.calculations import Calculate, Operations, Status
+from calc.models.roman_number import Roman_Number
 
 
 def test_create_calc():
@@ -58,3 +59,69 @@ def test_create_calc_all():
     
     #When user press equal 
     assert calc.state == Status.FINISHED
+
+#Roman Calculations
+def test_create_roman_calc():
+    rc = RomanCalculo()
+    assert rc.num_1 is None
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.EMPTY
+
+    assert rc.get_display() == ""
+
+def test_add_digits_to_rc_empty():
+    rc = RomanCalculo()
+    rc.add_key(Key("I", ButtonType.DIGITS))
+
+    assert rc.num_1 == Roman_Number("1")
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.PARTIAL
+
+    assert rc.get_display() == "I"
+
+def test_add_digits_to_rc_partial():
+    rc = RomanCalculo(Roman_Number(1))
+
+    rc.add_key(("V", ButtonType.DIGITS))
+    assert rc.num_1 == Roman_Number(4)
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.PARTIAL
+    assert rc/get_display() == "IV"
+
+def test_add_digits_to_rc_pending():
+    rc = RomanCalculo(Roman_Number(1), operation=Operations.ADD)
+
+    rc.add_key(key("V", ButtonType.DIGITS))
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation == Operations.ADD
+    assert rc.num_2 is Roman_Number(5)
+    assert rc.state == Status.COMPLETED
+
+    assert rc.get_display() == "V"
+
+def test_add_digits_to_rc_completed():
+    rc = RomanCalculo(Roman_Number(1), Roman_Number(5), Operations.ADD)
+    rc.add_key(Key("I", ButtonType.DIGITS))
+
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation == Operations.ADD
+    assert rc.num_2 == Roman_Number(6)
+    assert rc.state == Status.COMPLETED
+
+    assert rc.get_display() == "VI"
+
+def test_add_digits_to_rc_finished():
+    rc = RomanCalculo(Roman_Number(1), Roman_Number(6), Operations.ADD)
+    rc.result
+
+    rc.add_key(Key("I", ButtonType.DIGITS))
+
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.PARTIAL
+
+    assert rc.get_display() == "I"

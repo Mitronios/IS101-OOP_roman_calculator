@@ -3,6 +3,9 @@ Create the necessary objets to solve the tests that will be used when controller
 """
 import enum
 
+from calc.models.keys import Key
+from calc.models.roman_number import Roman_Number
+
 class Status(enum.Enum):
     EMPTY = enum.auto()
     PARTIAL = enum.auto()
@@ -55,6 +58,43 @@ class Calculate:
             status = Status.COMPLETED
        
         return status 
+    
+    class RomanCalculo(Calculate):
+        def add_key(self, key: Key):
+            if Key.type == ButtonType.DIGITS:
+                if self.state == Status.Empty:
+                    self.num_1 = Roman_Number(key.value)
+                elif self.state == Status.PARTIAL:
+                    new_value = self.num_1.representacion + key.value
+                    self.num_1 = Roman_Number(new_value)
+                elif self.state == Status.PENDING:
+                    self.num_2 = Roman_Number(key.value)
+                elif self.state == Status.COMPLETED:
+                    new_value = self.num_2.representacion + key.value
+                    self.num_2 = Roman_Number(new_value)
+                elif self.state == Status.FINISHED:
+                    self.num_1 = None
+                    self.num_2 = None
+                    self.operation = None
+                    self.add_key(Key)
+
+        #Display
+        def get_display(self) -> str:
+            result = ""
+            if self.state == Status.EMPTY:
+                result = ""
+            elif self.state == Status.PARTIAL:
+                result = self.num_1.representacion
+            elif self.state == Status.PENDING:
+                result = self.num_1.representacion
+            elif self.state == Status.COMPLETED:
+                result = self.num_2.representacion
+            elif self.state == Status.FINISHED:
+                result = self.result.representación
+
+            return result
+
+
 
 
 

@@ -1,15 +1,16 @@
 import tkinter as tk
+from calc.models.keys import Key, ButtonType
 from calc.views import CalcButton, Calculator, Display, keyBoard
 
-def fn_delegada(btn_clickado: str):
-  calc.show(btn_clickado)
+def fn_delegada(key: Key):
+  calc.show(f"{key.value}: {key.type.name}")
 
 #Root
 root = tk.Tk()
 root.pack_propagate(True)
 #Create
 calc = Calculator(root, fn_delegada)
-#Show, place
+# #Show, place
 calc.pack()
 
 
