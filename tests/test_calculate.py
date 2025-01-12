@@ -1,4 +1,5 @@
-from calc.models.calculations import Calculate, Operations, Status
+from calc.models.calculations import Calculate, Operations, RomanCalculo, Status
+from calc.models.keys import ButtonType, Key
 from calc.models.roman_number import Roman_Number
 
 
@@ -21,10 +22,10 @@ def test_create_calc():
 
 def test_create_incomplete_calcs():
     calc = Calculate()
-    assert calc.num_1 == None
-    assert calc.num_2 == None
-    assert calc.operation == None
-    assert calc.result== None
+    assert calc.num_1 is None
+    assert calc.num_2 is None
+    assert calc.operation is None
+    assert calc.result is None
     #Test Status
     assert calc.state == Status.EMPTY#Enum
 
@@ -74,7 +75,7 @@ def test_add_digits_to_rc_empty():
     rc = RomanCalculo()
     rc.add_key(Key("I", ButtonType.DIGITS))
 
-    assert rc.num_1 == Roman_Number("1")
+    assert rc.num_1 == Roman_Number(1)
     assert rc.operation is None
     assert rc.num_2 is None
     assert rc.state == Status.PARTIAL
@@ -84,20 +85,20 @@ def test_add_digits_to_rc_empty():
 def test_add_digits_to_rc_partial():
     rc = RomanCalculo(Roman_Number(1))
 
-    rc.add_key(("V", ButtonType.DIGITS))
+    rc.add_key(Key("V", ButtonType.DIGITS))
     assert rc.num_1 == Roman_Number(4)
     assert rc.operation is None
     assert rc.num_2 is None
     assert rc.state == Status.PARTIAL
-    assert rc/get_display() == "IV"
+    assert rc.get_display() == "IV"
 
 def test_add_digits_to_rc_pending():
     rc = RomanCalculo(Roman_Number(1), operation=Operations.ADD)
 
-    rc.add_key(key("V", ButtonType.DIGITS))
+    rc.add_key(Key("V", ButtonType.DIGITS))
     assert rc.num_1 == Roman_Number(1)
     assert rc.operation == Operations.ADD
-    assert rc.num_2 is Roman_Number(5)
+    assert rc.num_2 == Roman_Number(5)
     assert rc.state == Status.COMPLETED
 
     assert rc.get_display() == "V"

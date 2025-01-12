@@ -3,7 +3,7 @@ from calc.models.keys import Key, ButtonType
 from calc.views import CalcButton, Calculator, Display, keyBoard
 
 def fn_delegada(key: Key):
-  calc.show(f"{key.value}: {key.type.name}")
+  calc.show(f"{key.valor}: {key.tipo.name}")
 
 #Root
 root = tk.Tk()
