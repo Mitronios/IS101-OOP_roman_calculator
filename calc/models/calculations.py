@@ -3,7 +3,7 @@ Create the necessary objets to solve the tests that will be used when controller
 """
 import enum
 
-from calc.models.keys import Key
+from calc.models.keys import ButtonType, Key
 from calc.models.roman_number import Roman_Number
 
 class Status(enum.Enum):
@@ -21,7 +21,7 @@ class Operations(enum.Enum):
     MOD = "%"
 
 class Calculate:
-    def __init__(self, num_1: object=None, num_2: object=None, operation:Operations=None):
+    def __init__(self, num_1: object=None, num_2: object=None, operation: Operations=None):
         self.num_1 = num_1
         self.num_2 = num_2
         self.operation = operation
@@ -35,10 +35,10 @@ class Calculate:
                 result = self.num_1 + self.num_2
             elif self.operation == Operations.SUB:
                 result = self.num_1 - self.num_2
-            elif self.operation == Operations.DIV:
-                result = self.num_1 / self.num_2
             elif self.operation == Operations.PROD:
                 result = self.num_1 * self.num_2
+            elif self.operation == Operations.DIV:
+                result = self.num_1 / self.num_2
             elif self.operation == Operations.MOD:
                 result = self.num_1 % self.num_2
             self.__is_solved = True
@@ -59,40 +59,40 @@ class Calculate:
        
         return status 
     
-    class RomanCalculo(Calculate):
-        def add_key(self, key: Key):
-            if Key.type == ButtonType.DIGITS:
-                if self.state == Status.Empty:
-                    self.num_1 = Roman_Number(key.value)
-                elif self.state == Status.PARTIAL:
-                    new_value = self.num_1.representacion + key.value
-                    self.num_1 = Roman_Number(new_value)
-                elif self.state == Status.PENDING:
-                    self.num_2 = Roman_Number(key.value)
-                elif self.state == Status.COMPLETED:
-                    new_value = self.num_2.representacion + key.value
-                    self.num_2 = Roman_Number(new_value)
-                elif self.state == Status.FINISHED:
-                    self.num_1 = None
-                    self.num_2 = None
-                    self.operation = None
-                    self.add_key(Key)
-
-        #Display
-        def get_display(self) -> str:
-            result = ""
+class RomanCalculo(Calculate):
+    def add_key(self, key: Key):
+        if key.tipo == ButtonType.DIGITS:
             if self.state == Status.EMPTY:
-                result = ""
+                self.num_1 = Roman_Number(key.valor)
             elif self.state == Status.PARTIAL:
-                result = self.num_1.representacion
+                nuevo_valor = self.num_1.representacion + key.valor
+                self.num_1 = Roman_Number(nuevo_valor)
             elif self.state == Status.PENDING:
-                result = self.num_1.representacion
+                self.num_2 = Roman_Number(key.valor)
             elif self.state == Status.COMPLETED:
-                result = self.num_2.representacion
+                nuevo_valor = self.num_2.representacion + key.valor
+                self.num_2 = Roman_Number(nuevo_valor)
             elif self.state == Status.FINISHED:
-                result = self.result.representación
+                self.num_1 = None
+                self.num_2 = None
+                self.operation = None
+                self.add_key(key)
 
-            return result
+    #Display
+    def get_display(self) -> str:
+        result = ""
+        if self.state == Status.EMPTY:
+            result = ""
+        elif self.state == Status.PARTIAL:
+            result = self.num_1.representacion
+        elif self.state == Status.PENDING:
+            result = self.num_1.representacion
+        elif self.state == Status.COMPLETED:
+            result = self.num_2.representacion
+        elif self.state == Status.FINISHED:
+            result = self.result.representación
+
+        return result
 
 
 

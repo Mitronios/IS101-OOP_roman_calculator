@@ -9,7 +9,7 @@ class CalcButton(tk.Frame):
     def __init__(self, parent, key: Key, command: callable): #"Cuelga del padre", root.
         super().__init__(parent, width=BUTTON_WIDTH, height=BUTTON_HEIGHT)
         self.pack_propagate(False)#Que mantenga sus dimensiones aunequ el tamaño del contenedor cambie.
-        btn = tk.Button(self, text=key.value, command=self.__handle_click)
+        btn = tk.Button(self, text=key.valor, command=self.__handle_click)
         btn.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
 
         self.key = key
@@ -20,16 +20,15 @@ class CalcButton(tk.Frame):
 
 #Keyboard
 class keyBoard(tk.Frame):
-    key_buttons = (Key("Clear", ButtonType.RESET), Key("%", ButtonType.OPERATIONS), 
-                   Key("/", ButtonType.OPERATIONS), Key("-", ButtonType.OPERATIONS),
-                   Key("*", ButtonType.OPERATIONS), Key("+", ButtonType.OPERATIONS),
-                   Key("=", ButtonType.EQUAL), Key("I", ButtonType.DIGITS), 
-                   Key("V", ButtonType.DIGITS),Key("X", ButtonType.DIGITS),
-                   Key("L", ButtonType.DIGITS), Key("C", ButtonType.DIGITS),
-                   Key("D", ButtonType.DIGITS), Key("M", ButtonType.DIGITS),
-                   Key(".", ButtonType.DIGITS)  
-                    )
-    
+    key_buttons = (Key("clear", ButtonType.RESET), Key("%", ButtonType.OPERATIONS), 
+                   Key("/", ButtonType.OPERATIONS),Key("I", ButtonType.DIGITS), 
+                   Key("V", ButtonType.DIGITS), Key("*", ButtonType.OPERATIONS),
+                   Key("X", ButtonType.DIGITS), Key("L", ButtonType.DIGITS), 
+                   Key("-", ButtonType.OPERATIONS),Key("C", ButtonType.DIGITS), 
+                   Key("D", ButtonType.DIGITS), Key("+", ButtonType.OPERATIONS),
+                   Key("M", ButtonType.DIGITS), Key("•", ButtonType.DIGITS), 
+                   Key("=", ButtonType.EQUAL))
+
     
     def __init__(self, parent, command: callable):
         super().__init__(parent, width=3 * BUTTON_WIDTH, height=5 * BUTTON_HEIGHT)
