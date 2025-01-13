@@ -60,10 +60,38 @@ class Display(tk.Frame):
 class Calculator(tk.Frame):
     def __init__(self, parent, command: callable):
         super().__init__(parent)
-        self.display = Display(self)
+        frm_left = tk.Frame(self)
+        frm_left.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        frm_right = tk.Frame(self)
+        frm_right.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.display = Display(frm_left)
         self.display.pack()
-        keyboard = keyBoard(self, command)
+        keyboard = keyBoard(frm_left, command)
         keyboard.pack()
+        self.history = ResumePanel(frm_right)
+        self.history.pack()
 
     def show(self, text: str):
         self.display.show(text)
+
+class ResumePanel(tk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent, width=BUTTON_WIDTH*3, height=BUTTON_HEIGHT*6)
+        self.pack_propagate(False)
+        frm = tk.Frame(self, relief="groove")
+        frm.pack(side=tk.TOP, expand=True, fill=tk.X)
+        tk.Label(frm, text="RESUMEN", anchor=tk.W).pack(side=tk.LEFT, expand=True, fill=tk.X)
+        tk.Button(frm, text="Borrar", command=self.__reset).pack(side=tk.LEFT)
+
+        self.__panel = tk.Text(self, state="disabled")
+        self.__panel.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
+
+    def __reset(self):
+        self.__panel.config(state="normal")
+        self.__panel.delete("1.0", "end")
+        self.__panel.config(state="disabled")
+
+    def addline(self, value: str):
+        self.__panel.config(state="normal")
+        self.__panel.insert("end", f"{value}\n")
+        self.__panel.config(state="disabled")
