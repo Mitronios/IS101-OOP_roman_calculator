@@ -78,7 +78,7 @@ class ResumePanel(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent, width=BUTTON_WIDTH*3, height=BUTTON_HEIGHT*6)
         self.pack_propagate(False)
-        frm = tk.Frame(self, relief="groove")
+        frm = tk.Frame(self)
         frm.pack(side=tk.TOP, expand=True, fill=tk.X)
         tk.Label(frm, text="RESUMEN", anchor=tk.W).pack(side=tk.LEFT, expand=True, fill=tk.X)
         tk.Button(frm, text="Borrar", command=self.__reset).pack(side=tk.LEFT)
