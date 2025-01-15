@@ -1,6 +1,6 @@
 # Roman Calculator
 
-**Tkinter widget** build to learn and practice Object Oriented Pragramming as introduction.
+**Tkinter widget** built to learn and practice Object Oriented Pragramming as introduction.
 
 Projet built during Keepcoding IS101 live classes from 12/02/24 to 01/13/25
 
