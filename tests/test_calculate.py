@@ -81,6 +81,7 @@ def test_add_digits_to_rc_empty():
     assert rc.state == Status.PARTIAL
 
     assert rc.get_display() == "I"
+    assert rc.get_resume() == ""
 
 def test_add_digits_to_rc_partial():
     rc = RomanCalculo(Roman_Number(1))
@@ -91,6 +92,7 @@ def test_add_digits_to_rc_partial():
     assert rc.num_2 is None
     assert rc.state == Status.PARTIAL
     assert rc.get_display() == "IV"
+    assert rc.get_resume() == ""
 
 def test_add_digits_to_rc_pending():
     rc = RomanCalculo(Roman_Number(1), operation=Operations.ADD)
@@ -102,6 +104,7 @@ def test_add_digits_to_rc_pending():
     assert rc.state == Status.COMPLETED
 
     assert rc.get_display() == "V"
+    assert rc.get_resume() == ""
 
 def test_add_digits_to_rc_completed():
     rc = RomanCalculo(Roman_Number(1), Roman_Number(5), Operations.ADD)
@@ -113,10 +116,12 @@ def test_add_digits_to_rc_completed():
     assert rc.state == Status.COMPLETED
 
     assert rc.get_display() == "VI"
+    assert rc.get_resume() == ""
 
 def test_add_digits_to_rc_finished():
     rc = RomanCalculo(Roman_Number(1), Roman_Number(6), Operations.ADD)
     rc.result
+    assert rc.get_resume() == "I + VI = VII"
 
     rc.add_key(Key("I", ButtonType.DIGITS))
 
@@ -126,6 +131,7 @@ def test_add_digits_to_rc_finished():
     assert rc.state == Status.PARTIAL
 
     assert rc.get_display() == "I"
+    assert rc.get_resume() == ""
 
 #Operations tests
 def test_add_operations_to_rc_empty():
@@ -138,7 +144,7 @@ def test_add_operations_to_rc_empty():
     assert rc.state == Status.EMPTY
 
     assert rc.get_display() == ""
-    #assert rc.get_resume() == ""
+    assert rc.get_resume() == ""
 
 def test_add_operations_to_rc_partial():
     rc = RomanCalculo(Roman_Number(1))
@@ -150,7 +156,7 @@ def test_add_operations_to_rc_partial():
     assert rc.state == Status.PENDING
 
     assert rc.get_display() == "I"
-    #assert rc.get_resume() == ""
+    assert rc.get_resume() == ""
 
 def test_add_operations_to_rc_pending():
     rc = RomanCalculo(Roman_Number(1), operation=Operations.SUB)
@@ -165,7 +171,7 @@ def test_add_operations_to_rc_pending():
     assert rc.state == Status.PENDING
 
     assert rc.get_display() == "I"
-    #assert rc.get_resume() == ""
+    assert rc.get_resume() == ""
 
 def test_add_operations_to_rc_completo():
     rc = RomanCalculo(Roman_Number(1), Roman_Number(2), Operations.PROD)
@@ -177,7 +183,7 @@ def test_add_operations_to_rc_completo():
     assert rc.state == Status.PENDING
 
     assert rc.get_display() == "II"
-    #assert rc.get_resume() == "I * II = II"
+    assert rc.get_resume() == "I * II = II"
 
 def test_add_operations_to_rc_finished():
     rc = RomanCalculo(Roman_Number(1), Roman_Number(2), Operations.PROD)
@@ -190,7 +196,7 @@ def test_add_operations_to_rc_finished():
     assert rc.state == Status.PENDING
 
     assert rc.get_display() == "II"
-    #assert rc.get_resume() == "I * II = II"
+    assert rc.get_resume() == "I * II = II"
 
 def test_add_equal_to_rc():
     rc = RomanCalculo()
@@ -202,6 +208,7 @@ def test_add_equal_to_rc():
     assert rc.state == Status.EMPTY
 
     assert rc.get_display() == ""
+    assert rc.get_resume() == ""
 
     #Partial State
     rc.num_1 = Roman_Number(1)
@@ -213,6 +220,7 @@ def test_add_equal_to_rc():
     assert rc.state == Status.PARTIAL
 
     assert rc.get_display() == "I"
+    assert rc.get_resume() == ""
 
     #Pending state
     rc.operation = Operations.ADD
@@ -224,6 +232,7 @@ def test_add_equal_to_rc():
     assert rc.state == Status.PENDING
 
     assert rc.get_display() == "I"
+    assert rc.get_resume() == ""
 
     #Finished state
     rc.num_2 = Roman_Number(3)
@@ -236,6 +245,7 @@ def test_add_equal_to_rc():
     assert rc.result == Roman_Number(4)
 
     assert rc.get_display() == "IV"
+    assert rc.get_resume() == "I + III = IV"
 
     #After getting result 
     rc.add_key(Key("=", ButtonType.EQUAL))
@@ -247,6 +257,7 @@ def test_add_equal_to_rc():
     assert rc.result == Roman_Number(4)
 
     assert rc.get_display() == "IV"
+    assert rc.get_resume() == "I + III = IV"
 
 
 #Reset
@@ -260,3 +271,4 @@ def test_add_key_reset():
     assert rc.state == Status.EMPTY
 
     assert rc.get_display() == ""
+    assert rc.get_resume() == ""

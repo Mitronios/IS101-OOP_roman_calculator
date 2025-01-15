@@ -43,6 +43,7 @@ class Calculate:
                 result = self.num_1 % self.num_2
             self.__is_solved = True
 
+
         return result
         
     @property
@@ -60,8 +61,11 @@ class Calculate:
         return status 
     
 class RomanCalculo(Calculate):
+    __description: str = ""
+
     def add_key(self, key: Key):
         if key.tipo == ButtonType.DIGITS:
+            self.__description = ""
             if self.state == Status.EMPTY:
                 self.num_1 = Roman_Number(key.valor)
             elif self.state == Status.PARTIAL:
@@ -92,6 +96,7 @@ class RomanCalculo(Calculate):
                 self.result
         elif key.tipo == ButtonType.RESET:
             super().__init__()
+            self.__description = ""
 
 
     #Display
@@ -110,7 +115,16 @@ class RomanCalculo(Calculate):
 
         return result
 
+    #Resume
+    def get_resume(self) -> str:
+        return self.__description
 
-
+    #Redifining result
+    @property
+    def result(self):
+        res = super().result
+        if res is not None:
+            self.__description = f"{self.num_1} {self.operation.value} {self.num_2} = {res}"
+        return res
 
 

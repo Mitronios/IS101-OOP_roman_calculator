@@ -17,6 +17,9 @@ class App(tk.Tk):
     def handle_button_click(self, key: Key):
         self.calculo.add_key(key)
         self.calc.show(self.calculo.get_display())
+        pretty = self.calculo.get_resume()
+        if pretty:
+            self.calc.history.addline(pretty)
 
     def run(self):
         self.mainloop()
