@@ -127,6 +127,7 @@ def test_add_digits_to_rc_finished():
 
     assert rc.get_display() == "I"
 
+#Operations tests
 def test_add_operations_to_rc_empty():
     rc = RomanCalculo()
     rc.add_key(Key("+", ButtonType.OPERATIONS))
@@ -146,13 +147,13 @@ def test_add_operations_to_rc_partial():
     assert rc.num_1 == Roman_Number(1)
     assert rc.operation == Operations.ADD
     assert rc.num_2 is None
-    assert rc.state == Status.PARTIAL
+    assert rc.state == Status.PENDING
 
     assert rc.get_display() == "I"
     #assert rc.get_resume() == ""
 
 def test_add_operations_to_rc_pending():
-    rc = RomanCalculo(Roman_Number(1), operacion=Operations.SUB)
+    rc = RomanCalculo(Roman_Number(1), operation=Operations.SUB)
     assert rc.num_1 == Roman_Number(1)
     assert rc.operation == Operations.SUB
 
@@ -177,3 +178,85 @@ def test_add_operations_to_rc_completo():
 
     assert rc.get_display() == "II"
     #assert rc.get_resume() == "I * II = II"
+
+def test_add_operations_to_rc_finished():
+    rc = RomanCalculo(Roman_Number(1), Roman_Number(2), Operations.PROD)
+    rc.result
+    rc.add_key(Key("+", ButtonType.OPERATIONS))
+
+    assert rc.num_1 == Roman_Number(2)
+    assert rc.operation == Operations.ADD
+    assert rc.num_2 is None
+    assert rc.state == Status.PENDING
+
+    assert rc.get_display() == "II"
+    #assert rc.get_resume() == "I * II = II"
+
+def test_add_equal_to_rc():
+    rc = RomanCalculo()
+    rc.add_key(Key("=", ButtonType.EQUAL))
+    #Empty state
+    assert rc.num_1 is None
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.EMPTY
+
+    assert rc.get_display() == ""
+
+    #Partial State
+    rc.num_1 = Roman_Number(1)
+    rc.add_key(Key("=", ButtonType.EQUAL))
+
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.PARTIAL
+
+    assert rc.get_display() == "I"
+
+    #Pending state
+    rc.operation = Operations.ADD
+    rc.add_key(Key("=", ButtonType.EQUAL))
+
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation == Operations.ADD
+    assert rc.num_2 is None
+    assert rc.state == Status.PENDING
+
+    assert rc.get_display() == "I"
+
+    #Finished state
+    rc.num_2 = Roman_Number(3)
+    rc.add_key(Key("=", ButtonType.EQUAL))
+
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation == Operations.ADD
+    assert rc.num_2 == Roman_Number(3)
+    assert rc.state == Status.FINISHED
+    assert rc.result == Roman_Number(4)
+
+    assert rc.get_display() == "IV"
+
+    #After getting result 
+    rc.add_key(Key("=", ButtonType.EQUAL))
+
+    assert rc.num_1 == Roman_Number(1)
+    assert rc.operation == Operations.ADD
+    assert rc.num_2 == Roman_Number(3)
+    assert rc.state == Status.FINISHED
+    assert rc.result == Roman_Number(4)
+
+    assert rc.get_display() == "IV"
+
+
+#Reset
+def test_add_key_reset():
+    rc = RomanCalculo(Roman_Number(1), Roman_Number(9), Operations.PROD)
+    rc.add_key(Key("clear", ButtonType.RESET))
+    
+    assert rc.num_1 is None
+    assert rc.operation is None
+    assert rc.num_2 is None
+    assert rc.state == Status.EMPTY
+
+    assert rc.get_display() == ""

@@ -30,7 +30,7 @@ class Calculate:
     @property
     def result(self) ->object:
         result = None
-        if self.state == Status.COMPLETED:
+        if self.state in (Status.COMPLETED, Status.FINISHED):
             if self.operation == Operations.ADD:
                 result = self.num_1 + self.num_2
             elif self.operation == Operations.SUB:
@@ -77,6 +77,22 @@ class RomanCalculo(Calculate):
                 self.num_2 = None
                 self.operation = None
                 self.add_key(key)
+        elif key.tipo == ButtonType.OPERATIONS:
+            if self.state == Status.PARTIAL:
+                self.operation = Operations(key.valor)
+            elif self.state == Status.PENDING:
+                self.operation = Operations(key.valor)
+            elif self.state in (Status.COMPLETED, Status.FINISHED):
+                result = self.result
+                super().__init__()
+                self.num_1 = result
+                self.operation = Operations(key.valor)
+        elif key.tipo == ButtonType.EQUAL:
+            if self.state == Status.COMPLETED:
+                self.result
+        elif key.tipo == ButtonType.RESET:
+            super().__init__()
+
 
     #Display
     def get_display(self) -> str:
@@ -90,7 +106,7 @@ class RomanCalculo(Calculate):
         elif self.state == Status.COMPLETED:
             result = self.num_2.representacion
         elif self.state == Status.FINISHED:
-            result = self.result.representación
+            result = self.result.representacion
 
         return result
 
